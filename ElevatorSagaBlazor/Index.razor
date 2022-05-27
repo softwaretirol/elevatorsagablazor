@@ -1,0 +1,12 @@
+﻿@page "/"
+@page "/{Level:int}"
+
+<ElevatorSaga Level="@Level" 
+              Strategy="new ElevatorStrategy()" />
+
+
+@code
+{
+    [Parameter]
+    public int Level { get; set; }
+}

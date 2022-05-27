@@ -1,6 +1,6 @@
-﻿namespace ElevatorSagaBlazor;
+﻿namespace ElevatorSaga;
 
-public interface IGameImplementation
+public interface IElevatorStrategy
 {
     Task Initialize(IEnumerable<IFloor> floors, IEnumerable<IElevator> elevator);
 }

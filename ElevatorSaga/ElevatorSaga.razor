@@ -1,7 +1,7 @@
-﻿@page "/Game"
-@page "/Game/{Level:int}"
+﻿@using Microsoft.JSInterop
+
 @inject IJSRuntime JsRuntime
-@inject IGameImplementation GameImplementation
+@inject NavigationManager NavigationManager
 
 <div class="container">
     <div class="header">
@@ -38,6 +38,9 @@
     [Parameter]
     public int? Level { get; set; }
 
+    [Parameter]
+    public IElevatorStrategy Strategy { get; set; }
+
     private GameJavascriptTranslator _translator;
     private DotNetObjectReference<GameJavascriptTranslator> _jsReference;
 
@@ -45,9 +48,23 @@
     {
         if (firstRender)
         {
-            _translator = new GameJavascriptTranslator(GameImplementation, JsRuntime);
-            _jsReference = DotNetObjectReference.Create(_translator);
-            await JsRuntime.InvokeVoidAsync("startGame", Level ?? 0, _jsReference);
+            await StartGame();
+        }
+    }
+
+    private async Task StartGame()
+    {
+        _translator = new GameJavascriptTranslator(Strategy, JsRuntime,
+            NavigationManager.ToAbsoluteUri("/" + (Level + 1)).ToString());
+        _jsReference = DotNetObjectReference.Create(_translator);
+        await JsRuntime.InvokeVoidAsync("startGame", Level ?? 0, _jsReference);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_jsReference != null)
+        {
+            await StartGame();
         }
     }
 }

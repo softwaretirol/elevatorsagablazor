@@ -36,6 +36,11 @@ function Elevator(speedFloorsPerSec, floorCount, floorHeight, maxUsers) {
         elevator.trigger("indicatorstate_change", {up: elevator.goingUpIndicator, down: elevator.goingDownIndicator});
     });
 
+
+    elevator.setCallback = function (callback) {
+        elevator.callback = callback;
+    };
+
     elevator.on("change:goingDownIndicator", function(value){
         elevator.trigger("indicatorstate_change", {up: elevator.goingUpIndicator, down: elevator.goingDownIndicator});
     });
@@ -69,6 +74,9 @@ Elevator.prototype.pressFloorButton = function(floorNumber) {
     if(!prev) {
         this.trigger("floor_button_pressed", floorNumber);
         this.trigger("floor_buttons_changed", this.buttonStates, floorNumber);
+        if (this.callback) {
+            this.callback.invokeMethodAsync("OnFloorButtonPressed", floorNumber);
+        }
     }
 };
 
@@ -154,6 +162,7 @@ Elevator.prototype.goToFloor = function(floor) {
     this.isMoving = true;
     this.destinationY = this.getYPosOfFloor(floor);
 };
+
 
 Elevator.prototype.getFirstPressedFloor = function() {
     deprecationWarning("getFirstPressedFloor");

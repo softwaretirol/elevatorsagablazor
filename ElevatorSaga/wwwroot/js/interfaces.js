@@ -7,18 +7,30 @@ var asElevatorInterface = function(obj, elevator, floorCount, errorHandler) {
 
     elevatorInterface.destinationQueue = [];
 
+    elevatorInterface.getDestinationQueue = function() {
+        return elevatorInterface.destinationQueue;
+    }
+
     var tryTrigger = function(event, arg1, arg2, arg3, arg4) {
         try {
             elevatorInterface.trigger(event, arg1, arg2, arg3, arg4);
         } catch(e) { errorHandler(e); }
     };
 
+    elevatorInterface.setCallback = function (callback) {
+        elevator.setCallback(callback);
+    };
     elevatorInterface.checkDestinationQueue = function() {
         if(!elevator.isBusy()) {
             if(elevatorInterface.destinationQueue.length) {
                 elevator.goToFloor(_.first(elevatorInterface.destinationQueue));
             } else {
                 tryTrigger("idle");
+
+
+                if (elevator.callback) {
+                    elevator.callback.invokeMethodAsync("OnIdle");
+                }
             }
         }
     };
@@ -72,13 +84,26 @@ var asElevatorInterface = function(obj, elevator, floorCount, errorHandler) {
 
     elevator.on("passing_floor", function(floorNum, direction) {
         tryTrigger("passing_floor", floorNum, direction);
+
+        if (elevator.callback) {
+            elevator.callback.invokeMethodAsync("OnPassingFloor", floorNum, direction);
+        }
     });
 
     elevator.on("stopped_at_floor", function(floorNum) {
         tryTrigger("stopped_at_floor", floorNum);
+
+        if (elevator.callback) {
+            elevator.callback.invokeMethodAsync("OnStoppedAtFloor", floorNum);
+        }
     });
+
     elevator.on("floor_button_pressed", function(floorNum) {
         tryTrigger("floor_button_pressed", floorNum);
+
+        if (elevator.callback) {
+            elevator.callback.invokeMethodAsync("OnFloorButtonPressed", floorNum);
+        }
     });
 
     return elevatorInterface;

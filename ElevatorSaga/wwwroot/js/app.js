@@ -17,22 +17,11 @@ function startGame(level, dotnetTranslator) {
         init: async function (elevators, floors) {
             globalElevators = elevators;
             globalFloors = floors;
-            
             await dotnetTranslator.invokeMethodAsync("init", elevators.length, floors.length);
-
-            var elevator = elevators[0]; // Let's use the first elevator
-
-            // Whenever the elevator is idle (has no more queued destinations) ...
-            elevator.on("idle", function () {
-                // let's go to all the floors (or did we forget one?)
-                elevator.goToFloor(0);
-                elevator.goToFloor(1);
-            });
         },
         update: function (dt, elevators, floors) {
-            // We normally don't need to do anything here
         }
-    }; //BLAZOR
+    }; 
 
     var tsKey = "elevatorTimeScale";
 
@@ -89,15 +78,22 @@ function startGame(level, dotnetTranslator) {
             presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
         });
 
-        app.world.on("stats_changed", function() {
+        app.world.on("stats_changed", async function() {
             var challengeStatus = challenges[challengeIndex].condition.evaluate(app.world);
             if(challengeStatus !== null) {
                 app.world.challengeEnded = true;
                 app.worldController.setPaused(true);
-                if(challengeStatus) {
-                    presentFeedback($feedback, feedbackTempl, app.world, "Success!", "Challenge completed", alert('juhu')); // BLAZOR
+                if (challengeStatus) {
+                    var link = await dotnetTranslator.invokeMethodAsync("success");
+
+                    presentFeedback($feedback,
+                        feedbackTempl,
+                        app.world,
+                        "Success!",
+                        "Challenge completed",
+                        link);
                 } else {
-                    presentFeedback($feedback, feedbackTempl, app.world, "Challenge failed", "Maybe your program needs an improvement?", ""); // BLAZOR
+                    presentFeedback($feedback, feedbackTempl, app.world, "Challenge failed", "Maybe your program needs an improvement?"); // BLAZOR
                 }
             }
         });
