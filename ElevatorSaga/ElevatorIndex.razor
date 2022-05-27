@@ -1,8 +1,8 @@
 ﻿@page "/"
 @page "/{Level:int}"
+@inject IElevatorStrategy Strategy
 
-<ElevatorSaga Level="@Level" 
-              Strategy="new ElevatorStrategy()" />
+<ElevatorSagaComponent Level="@Level" Strategy="@Strategy" />
 
 
 @code
