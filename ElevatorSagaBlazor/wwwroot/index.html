@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elevator Saga - the elevator programming game</title>
+    <meta charset="UTF-8">
+    <base href="/" />
+
+    <link rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all">
+    <link href='https://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
+
+    <link href="style.css" rel="stylesheet" />
+    <link href="ElevatorSagaBlazor.styles.css" rel="stylesheet" />
+
+
+    <script type="text/template" id="user-template">
+        <i class="movable fa user fa-{u.displayType} {state}"></i>
+    </script>
+
+    <script type="text/template" id="floor-template">
+        <div class="floor" style="top: {yPosition}px">
+            <span class="floornumber">{level}</span>
+            <span class="buttonindicator">
+                <i class="fa fa-arrow-circle-up up"></i>
+                <i class="fa fa-arrow-circle-down down"></i>
+            </span>
+        </div>
+    </script>
+
+    <script type="text/template" id="elevator-template">
+        <div class="elevator movable" style="width: {e.width}px">
+            <span class="directionindicator directionindicatorup"><i class="fa fa-arrow-circle-up up activated"></i></span>
+            <span class="floorindicator"><span></span></span>
+            <span class="directionindicator directionindicatordown"><i class="fa fa-arrow-circle-down down activated"></i></span>
+            <span class="buttonindicator"></span>
+        </div>
+    </script>
+
+    <script type="text/template" id="elevatorbutton-template">
+        <span class="buttonpress">{floorNum}</span>
+    </script>
+
+    <script type="text/template" id="feedback-template">
+        <div class="feedback">
+            <h2 class="emphasis-color">{title}</h2>
+            <p class="emphasis-color">{message}</p>
+            <a href="{url}" class="emphasis-color">Next challenge <i class="fa fa-caret-right blink" style="text-decoration: blink"></i></a>
+        </div>
+    </script>
+
+    <script type="text/template" id="challenge-template">
+        <div class="left">
+            <h3>Challenge #{num}: {challenge.condition.description}</h3>
+        </div>
+        <button class="right startstop unselectable" style="width: 110px">{startButtonText}</button>
+        <h3 class="right">
+            <i class="fa fa-minus-square timescale_decrease unselectable"></i>
+            <span class="emphasis-color" style="display: inline-block; width: 22px; text-align: center">{timeScale}</span>
+            <i class="fa fa-plus-square timescale_increase unselectable"></i>
+        </h3>
+    </script>
+</head>
+<body>
+    <div id="app">Loading...</div>
+    <script src="_framework/blazor.webassembly.js"></script>
+
+    <script type="text/javascript" src="js/libs/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/libs/lodash.min.js"></script>
+    <script type="text/javascript" src="js/libs/riot.js"></script>
+
+    <script type="text/javascript" src="js/libs/unobservable.js"></script>
+
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/movable.js"></script>
+    <script type="text/javascript" src="js/floor.js"></script>
+    <script type="text/javascript" src="js/user.js"></script>
+    <script type="text/javascript" src="js/elevator.js"></script>
+    <script type="text/javascript" src="js/interfaces.js"></script>
+    <script type="text/javascript" src="js/world.js"></script>
+    <script type="text/javascript" src="js/presenters.js"></script>
+    <script type="text/javascript" src="js/challenges.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+
+</body>
+</html>
