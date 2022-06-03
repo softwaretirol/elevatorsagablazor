@@ -70,14 +70,21 @@ public class ElevatorJs : IElevator
         return Enum.Parse<ElevatorDirection>(result, true);
     }
 
-    public async Task<int[]> GetDestinationQueue()
+    public async Task<IList<int>> GetDestinationQueue()
     {
-        return await _nativeObject.InvokeAsync<int[]>("getDestinationQueue");
+        var result = await _nativeObject.InvokeAsync<int[]>("getDestinationQueue");
+        return result.ToList();
     }
 
-    public async Task<int[]> GetPressedFloors()
+    public async Task<IList<int>> GetPressedFloors()
     {
-        return await _nativeObject.InvokeAsync<int[]>("getPressedFloors");
+        var result = await _nativeObject.InvokeAsync<int[]>("getPressedFloors");
+        return result.ToList();
+    }
+
+    public async Task SetDestinationQueue(int[] floors)
+    {
+        await _nativeObject.InvokeAsync<int[]>("setDestinationQueue", floors);
     }
 
     public event Action? Idle;
@@ -98,9 +105,10 @@ public class ElevatorJs : IElevator
     }
 
     [JSInvokable]
-    public virtual void OnPassingFloor(int arg1, ElevatorDirection arg2)
+    public virtual void OnPassingFloor(int arg1, string arg2)
     {
-        PassingFloor?.Invoke(arg1, arg2);
+        var elevatorDirection = Enum.Parse<ElevatorDirection>(arg2.Trim('\''), true);
+        PassingFloor?.Invoke(arg1, elevatorDirection);
     }
 
     [JSInvokable]

@@ -260,6 +260,10 @@ Elevator.prototype.handleNewState = function() {
         if(this.getDestinationFloor() !== floorBeingPassed && this.isApproachingFloor(floorBeingPassed)) {
             var direction = this.velocityY > 0.0 ? "down" : "up";
             this.trigger("passing_floor", floorBeingPassed, direction);
+
+            if (this.callback) {
+                this.callback.invokeMethodAsync("OnPassingFloor", floorBeingPassed, direction);
+            }
         }
     }
     this.previousTruncFutureFloorIfStopped = futureTruncFloorIfStopped;

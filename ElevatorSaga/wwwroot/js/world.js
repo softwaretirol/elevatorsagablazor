@@ -230,13 +230,13 @@ var createWorldController = function(dtMax) {
         var lastT = null;
         var firstUpdate = true;
         world.on("usercode_error", controller.handleUserCodeError);
-        var updater = function(t) {
+        var updater = async function(t) {
             if(!controller.isPaused && !world.challengeEnded && lastT !== null) {
                 if(firstUpdate) {
                     firstUpdate = false;
                     // This logic prevents infite loops in usercode from breaking the page permanently - don't evaluate user code until game is unpaused.
                     try {
-                        codeObj.init(world.elevatorInterfaces, world.floors);
+                        await codeObj.init(world.elevatorInterfaces, world.floors);
                         world.init();
                     } catch(e) { controller.handleUserCodeError(e); }
                 }

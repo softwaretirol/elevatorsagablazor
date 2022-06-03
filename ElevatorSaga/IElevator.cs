@@ -12,10 +12,11 @@ public interface IElevator
     Task<int> GetMaxPassengerCount();
     Task<double> GetLoadFactor();
     Task<ElevatorDirection> GetCurrentDirection();
-    Task<int[]> GetDestinationQueue();
-    Task<int[]> GetPressedFloors();
+    Task<IList<int>> GetDestinationQueue();
+    Task<IList<int>> GetPressedFloors();
+    Task SetDestinationQueue(int[] floors);
 
-    
+
     event Action Idle;
     event Action<int> FloorButtonPressed;
     event Action<int, ElevatorDirection> PassingFloor;

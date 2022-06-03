@@ -17,26 +17,26 @@ var asFloor = function(obj, floorLevel, yPosition, errorHandler) {
         floor.callback = callback;
     };
 
-    floor.pressUpButton = function() {
+    floor.pressUpButton = async function() {
         var prev = floor.buttonStates.up;
         floor.buttonStates.up = "activated";
         if(prev !== floor.buttonStates.up) {
             tryTrigger("buttonstate_change", floor.buttonStates);
             tryTrigger("up_button_pressed", floor);
             if (floor.callback) {
-                floor.callback.invokeMethodAsync("OnUpButtonPressed");
+                await floor.callback.invokeMethodAsync("OnUpButtonPressed");
             }
         }
     };
 
-    floor.pressDownButton = function() {
+    floor.pressDownButton = async function() {
         var prev = floor.buttonStates.down;
         floor.buttonStates.down = "activated";
         if(prev !== floor.buttonStates.down) {
             tryTrigger("buttonstate_change", floor.buttonStates);
             tryTrigger("down_button_pressed", floor);
             if (floor.callback) {
-                floor.callback.invokeMethodAsync("OnDownButtonPressed");
+                await floor.callback.invokeMethodAsync("OnDownButtonPressed");
             }
         }
     };
